@@ -17,9 +17,6 @@ public class User {
 
     private String name;
     private String surname;
-
-    @Column(name = "person_id")
     private String personId;
-
     private String uuid;
 }
