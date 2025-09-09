@@ -7,6 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class PersonIdResponse {
+public class PersonIdResponseDTO {
     private List<String> validPersonIds;
 }

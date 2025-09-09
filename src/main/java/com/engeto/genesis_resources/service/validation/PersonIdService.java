@@ -1,6 +1,6 @@
 package com.engeto.genesis_resources.service.validation;
 
-import com.engeto.genesis_resources.dto.PersonIdResponse;
+import com.engeto.genesis_resources.dto.PersonIdResponseDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +19,7 @@ public class PersonIdService {
 
     public boolean isValidPersonId(String personId) {
         RestTemplate restTemplate = new RestTemplate();
-        PersonIdResponse response = restTemplate.getForObject(validIdsUrl, PersonIdResponse.class);
+        PersonIdResponseDTO response = restTemplate.getForObject(validIdsUrl, PersonIdResponseDTO.class);
 
         if (response == null || response.getValidPersonIds() == null) {
             return false;

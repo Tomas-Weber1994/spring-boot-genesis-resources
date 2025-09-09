@@ -1,6 +1,9 @@
 package com.engeto.genesis_resources.service;
 
 import com.engeto.genesis_resources.dto.UserLiteDTO;
+import com.engeto.genesis_resources.exception.DatabaseConstraintException;
+import com.engeto.genesis_resources.exception.InvalidPersonIdException;
+import com.engeto.genesis_resources.exception.UserNotFoundException;
 import com.engeto.genesis_resources.model.User;
 import com.engeto.genesis_resources.repository.UserRepository;
 import com.engeto.genesis_resources.service.validation.PersonIdService;
@@ -14,7 +17,7 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PersonIdService personIdService;
@@ -37,35 +40,38 @@ public class UserService {
     public void addUser(User user) {
         // personId validation against mocked API
         if (!personIdService.isValidPersonId(user.getPersonId())) {
-            throw new RuntimeException("Invalid personId: " + user.getPersonId());
+            throw new InvalidPersonIdException(user.getPersonId());
         }
         try {
             userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Database constraint violated: " + e.getMostSpecificCause().getMessage());
+            throw new DatabaseConstraintException(e);
         }
     }
 
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public UserLiteDTO getUserLiteById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
+                .orElseThrow(() -> new UserNotFoundException(id));
         return new UserLiteDTO(user.getId(), user.getName(), user.getSurname());
     }
 
     public User updateUserById(UserLiteDTO dto) {
         User user = userRepository.findById(dto.getId())
-                .orElseThrow(() -> new RuntimeException("User not found with id " + dto.getId()));
+                .orElseThrow(() -> new UserNotFoundException(dto.getId()));
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         return userRepository.save(user);
     }
 
     public void deleteUserById(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(id);
+        }
         userRepository.deleteById(id);
     }
 }

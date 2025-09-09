@@ -4,49 +4,82 @@ import com.engeto.genesis_resources.dto.UserLiteDTO;
 import com.engeto.genesis_resources.model.User;
 import com.engeto.genesis_resources.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
+
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @PostMapping
-    public void createUser(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> createUser(@RequestBody User user) {
         userService.addUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "message", "User created successfully",
+                        "user", user
+                ));
     }
 
     @GetMapping
-    public Object getUsers(
-            @RequestParam(required = false, defaultValue = "false") Boolean detail) {
+    public ResponseEntity<Map<String, Object>> getUsers(
+            @RequestParam(required = false, defaultValue = "false") boolean detail) {
         if (detail) {
-            return userService.getAllUsers();
+            List<User> users = userService.getAllUsers();
+            return ResponseEntity.ok(Map.of(
+                    "message", "Users (detailed info) retrieved successfully",
+                    "users", users
+            ));
         } else {
-            return userService.getAllUsersLite();
+            List<UserLiteDTO> usersLite = userService.getAllUsersLite();
+            return ResponseEntity.ok(Map.of(
+                    "message", "Users retrieved successfully",
+                    "users", usersLite
+            ));
         }
     }
 
     @GetMapping("/{id}")
-    public Object getUser(
+    public ResponseEntity<Map<String, Object>> getUser(
             @PathVariable Long id,
-            @RequestParam(required = false, defaultValue = "false") Boolean detail) {
+            @RequestParam(required = false, defaultValue = "false") boolean detail) {
         if (detail) {
-            return userService.getUserById(id);
+            User user = userService.getUserById(id);
+            return ResponseEntity.ok(Map.of(
+                    "message", "User (detailed info) retrieved successfully",
+                    "user", user
+            ));
         } else {
-            return userService.getUserLiteById(id);
+            UserLiteDTO userLite = userService.getUserLiteById(id);
+            return ResponseEntity.ok(Map.of(
+                    "message", "User retrieved successfully",
+                    "user", userLite
+            ));
         }
     }
 
     @PutMapping
-    public UserLiteDTO updateUser(@RequestBody UserLiteDTO dto) {
+    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserLiteDTO dto) {
         User updatedUser = userService.updateUserById(dto);
-        return new UserLiteDTO(updatedUser.getId(), updatedUser.getName(), updatedUser.getSurname());
+        UserLiteDTO response = new UserLiteDTO(updatedUser.getId(), updatedUser.getName(), updatedUser.getSurname());
+        return ResponseEntity.ok(Map.of(
+                "message", "User updated successfully",
+                "user", response
+        ));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
+        return ResponseEntity.ok(Map.of(
+                "message", "User with ID " + id + " deleted successfully"
+        ));
     }
 }
