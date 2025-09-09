@@ -2,17 +2,18 @@ package com.engeto.genesis_resources.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import jakarta.validation.ConstraintViolationException;
-import java.util.stream.Collectors;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -39,6 +40,7 @@ public class GlobalExceptionHandler {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
+        log.warn("Handled custom exception: {} at path {}", e.getMessage(), request.getRequestURI());
         return buildErrorResponse(status, e.getMessage(), request.getRequestURI());
     }
 
@@ -51,12 +53,14 @@ public class GlobalExceptionHandler {
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining("; "));
 
+        log.warn("Validation error at {}: {}", request.getRequestURI(), message);
         return buildErrorResponse(HttpStatus.BAD_REQUEST, message, request.getRequestURI());
     }
 
     // Catch-all for other unhandled RuntimeExceptions
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleOtherRuntimeExceptions(RuntimeException e, HttpServletRequest request) {
+        log.error("Unexpected error at {}: {}", request.getRequestURI(), e.getMessage(), e);
         return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), request.getRequestURI());
     }
 }
