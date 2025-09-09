@@ -27,6 +27,5 @@ public class User {
     @Pattern(regexp = "[a-zA-Z0-9]{12}", message = "Person ID must be 12 alphanumeric characters")
     private String personId;
 
-    @Pattern(regexp = "\\d+", message = "UUID must contain only digits")
     private String uuid;
 }

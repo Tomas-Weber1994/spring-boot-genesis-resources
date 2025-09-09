@@ -1,6 +1,7 @@
 package com.engeto.genesis_resources.controller;
 
-import com.engeto.genesis_resources.dto.UserLiteDTO;
+import com.engeto.genesis_resources.dto.UserCreateDTO;
+import com.engeto.genesis_resources.dto.UserLiteResponseDTO;
 import com.engeto.genesis_resources.model.User;
 import com.engeto.genesis_resources.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createUser(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> createUser(@RequestBody UserCreateDTO user) {
         userService.addUser(user);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of(
@@ -38,7 +39,7 @@ public class UserController {
                     "users", users
             ));
         } else {
-            List<UserLiteDTO> usersLite = userService.getAllUsersLite();
+            List<UserLiteResponseDTO> usersLite = userService.getAllUsersLite();
             return ResponseEntity.ok(Map.of(
                     "message", "Users retrieved successfully",
                     "users", usersLite
@@ -57,7 +58,7 @@ public class UserController {
                     "user", user
             ));
         } else {
-            UserLiteDTO userLite = userService.getUserLiteById(id);
+            UserLiteResponseDTO userLite = userService.getUserLiteById(id);
             return ResponseEntity.ok(Map.of(
                     "message", "User retrieved successfully",
                     "user", userLite
@@ -66,9 +67,9 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserLiteDTO dto) {
+    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserLiteResponseDTO dto) {
         User updatedUser = userService.updateUserById(dto);
-        UserLiteDTO response = new UserLiteDTO(updatedUser.getId(), updatedUser.getName(), updatedUser.getSurname());
+        UserLiteResponseDTO response = new UserLiteResponseDTO(updatedUser.getId(), updatedUser.getName(), updatedUser.getSurname());
         return ResponseEntity.ok(Map.of(
                 "message", "User updated successfully",
                 "user", response

@@ -1,6 +1,7 @@
 package com.engeto.genesis_resources.service;
 
-import com.engeto.genesis_resources.dto.UserLiteDTO;
+import com.engeto.genesis_resources.dto.UserCreateDTO;
+import com.engeto.genesis_resources.dto.UserLiteResponseDTO;
 import com.engeto.genesis_resources.exception.DatabaseConstraintException;
 import com.engeto.genesis_resources.exception.InvalidPersonIdException;
 import com.engeto.genesis_resources.exception.UserNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -26,10 +28,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<UserLiteDTO> getAllUsersLite() {
+    public List<UserLiteResponseDTO> getAllUsersLite() {
         return userRepository.findAll()
                 .stream()
-                .map(user -> new UserLiteDTO(
+                .map(user -> new UserLiteResponseDTO(
                         user.getId(),
                         user.getName(),
                         user.getSurname()
@@ -37,11 +39,17 @@ public class UserService {
                 .toList();
     }
 
-    public void addUser(User user) {
-        // personId validation against mocked API
-        if (!personIdService.isValidPersonId(user.getPersonId())) {
-            throw new InvalidPersonIdException(user.getPersonId());
+    public void addUser(UserCreateDTO dto) {
+        if (!personIdService.isValidPersonId(dto.getPersonId())) {
+            throw new InvalidPersonIdException(dto.getPersonId());
         }
+
+        User user = new User();
+        user.setName(dto.getName());
+        user.setSurname(dto.getSurname());
+        user.setPersonId(dto.getPersonId());
+        user.setUuid(UUID.randomUUID().toString());
+
         try {
             userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
@@ -49,18 +57,19 @@ public class UserService {
         }
     }
 
+
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public UserLiteDTO getUserLiteById(Long id) {
+    public UserLiteResponseDTO getUserLiteById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        return new UserLiteDTO(user.getId(), user.getName(), user.getSurname());
+        return new UserLiteResponseDTO(user.getId(), user.getName(), user.getSurname());
     }
 
-    public User updateUserById(UserLiteDTO dto) {
+    public User updateUserById(UserLiteResponseDTO dto) {
         User user = userRepository.findById(dto.getId())
                 .orElseThrow(() -> new UserNotFoundException(dto.getId()));
         user.setName(dto.getName());
