@@ -3,7 +3,9 @@ package com.engeto.genesis_resources.service;
 import com.engeto.genesis_resources.dto.UserLiteDTO;
 import com.engeto.genesis_resources.model.User;
 import com.engeto.genesis_resources.repository.UserRepository;
+import com.engeto.genesis_resources.service.validation.PersonIdService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PersonIdService personIdService;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -30,7 +35,15 @@ public class UserService {
     }
 
     public void addUser(User user) {
-        userRepository.save(user);
+        // personId validation against mocked API
+        if (!personIdService.isValidPersonId(user.getPersonId())) {
+            throw new RuntimeException("Invalid personId: " + user.getPersonId());
+        }
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Database constraint violated: " + e.getMostSpecificCause().getMessage());
+        }
     }
 
     public User getUserById(Long id) {
