@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public void addUser(UserCreateDTO dto) {
-        log.info("Trying to add new user with personId={}...", dto.getPersonId());
+        log.info("Trying to add new user with personId: {}...", dto.getPersonId());
         if (!personIdService.isValidPersonId(dto.getPersonId())) {
             throw new InvalidPersonIdException(dto.getPersonId());
         }
@@ -57,42 +57,42 @@ public class UserService {
 
         try {
             userRepository.save(user);
-            log.info("User saved successfully with uuid={}", user.getUuid());
+            log.info("User saved successfully with uuid: {}", user.getUuid());
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseConstraintException(e);
         }
     }
 
     public User getUserById(Long id) {
-        log.info("Retrieving user by id={}", id);
+        log.info("Retrieving user by id: {}", id);
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public UserLiteResponseDTO getUserLiteById(Long id) {
-        log.info("Retrieving lite user by id={}", id);
+        log.info("Retrieving user (lite) by id: {}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         return new UserLiteResponseDTO(user.getId(), user.getName(), user.getSurname());
     }
 
     public User updateUserById(UserLiteResponseDTO dto) {
-        log.info("Updating user with id={}", dto.getId());
+        log.info("Updating user with id: {}", dto.getId());
         User user = userRepository.findById(dto.getId())
                 .orElseThrow(() -> new UserNotFoundException(dto.getId()));
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         User updatedUser = userRepository.save(user);
-        log.info("User updated successfully with id={}", updatedUser.getId());
+        log.info("User updated successfully with id: {}", updatedUser.getId());
         return updatedUser;
     }
 
     public void deleteUserById(Long id) {
-        log.info("Trying to delete user with id={}...", id);
+        log.info("Trying to delete user with id: {}...", id);
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException(id);
         }
         userRepository.deleteById(id);
-        log.info("User with id={} deleted successfully", id);
+        log.info("User with id: {} deleted successfully", id);
     }
 }
