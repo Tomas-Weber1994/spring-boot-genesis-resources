@@ -60,7 +60,17 @@ Valid changes are persisted in the database.
 
 ## 📌 Run the application
 
-1. First, start the **Person ID Provider** helper service:  
+Before running the application, make sure to set up the database and import the Postman collection:
+
+1. **Set up the test database**
+   - Import the SQL dump located in the `db/` folder into your local MariaDB instance.
+
+2. **Load the Postman collection**
+   - Open Postman and import the collection from the `postman/` folder.
+
+3. Start the **Person ID Provider** helper service:  
    [https://github.com/Tomas-Weber1994/personid-provider](https://github.com/Tomas-Weber1994/personid-provider)
-2. Then, start the **Genesis Resources – User Management API** application.
-3. You can now send requests using **Postman** (Postman collection & SQL commands for DB set up attached).
+
+4. Start the **Genesis Resources – User Management API** application.
+
+5. Now you can send requests using Postman.
