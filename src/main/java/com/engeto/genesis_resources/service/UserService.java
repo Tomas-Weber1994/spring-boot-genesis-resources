@@ -28,12 +28,14 @@ public class UserService {
 
     public List<User> getAllUsers() {
         log.info("Retrieving all users (detailed info)");
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        log.info("Retrieved {} users (detailed)", users.size());
+        return users;
     }
 
     public List<UserLiteResponseDTO> getAllUsersLite() {
         log.info("Retrieving all users (lite)");
-        return userRepository.findAll()
+        List<UserLiteResponseDTO> users = userRepository.findAll()
                 .stream()
                 .map(user -> new UserLiteResponseDTO(
                         user.getId(),
@@ -41,11 +43,15 @@ public class UserService {
                         user.getSurname()
                 ))
                 .toList();
+        log.info("Retrieved {} users (lite)", users.size());
+        return users;
     }
 
     public void addUser(UserCreateDTO dto) {
         log.info("Trying to add new user with personId: {}...", dto.getPersonId());
+
         if (!personIdService.isValidPersonId(dto.getPersonId())) {
+            log.warn("Invalid personId provided: {}", dto.getPersonId());
             throw new InvalidPersonIdException(dto.getPersonId());
         }
 
@@ -59,6 +65,7 @@ public class UserService {
             userRepository.save(user);
             log.info("User saved successfully with uuid: {}", user.getUuid());
         } catch (DataIntegrityViolationException e) {
+            log.error("Database constraint violation while saving user with personId: {}", dto.getPersonId(), e);
             throw new DatabaseConstraintException(e);
         }
     }
@@ -66,20 +73,29 @@ public class UserService {
     public User getUserById(Long id) {
         log.info("Retrieving user by id: {}", id);
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> {
+                    log.warn("User with id {} not found", id);
+                    return new UserNotFoundException(id);
+                });
     }
 
     public UserLiteResponseDTO getUserLiteById(Long id) {
         log.info("Retrieving user (lite) by id: {}", id);
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> {
+                    log.warn("User (lite) with id {} not found", id);
+                    return new UserNotFoundException(id);
+                });
         return new UserLiteResponseDTO(user.getId(), user.getName(), user.getSurname());
     }
 
     public User updateUserById(UserLiteResponseDTO dto) {
         log.info("Updating user with id: {}", dto.getId());
         User user = userRepository.findById(dto.getId())
-                .orElseThrow(() -> new UserNotFoundException(dto.getId()));
+                .orElseThrow(() -> {
+                    log.warn("User with id {} not found for update", dto.getId());
+                    return new UserNotFoundException(dto.getId());
+                });
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         User updatedUser = userRepository.save(user);
@@ -90,6 +106,7 @@ public class UserService {
     public void deleteUserById(Long id) {
         log.info("Trying to delete user with id: {}...", id);
         if (!userRepository.existsById(id)) {
+            log.warn("User with id {} not found for deletion", id);
             throw new UserNotFoundException(id);
         }
         userRepository.deleteById(id);
