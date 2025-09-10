@@ -36,7 +36,7 @@ public class PersonIdService {
 
         } catch (RestClientException e) {
             throw new PersonIdServerUnavailableException(
-                    "PersonId service not reachable, please try restart.", e
+                    "PersonId Certification Server is currently not reachable", e
             );
         }
     }

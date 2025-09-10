@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PersonIdServerUnavailableException.class)
     public ResponseEntity<Map<String, Object>> handlePersonIdServiceUnavailable(
             PersonIdServerUnavailableException e, HttpServletRequest request) {
-        log.error("PersonId service unavailable at {}: {}", request.getRequestURI(), e.getMessage());
+        log.error("Server unavailable at {}: {}", request.getRequestURI(), e.getMessage());
         return buildErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), request.getRequestURI());
     }
 
