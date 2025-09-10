@@ -57,6 +57,13 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, message, request.getRequestURI());
     }
 
+    @ExceptionHandler(PersonIdServerUnavailableException.class)
+    public ResponseEntity<Map<String, Object>> handlePersonIdServiceUnavailable(
+            PersonIdServerUnavailableException e, HttpServletRequest request) {
+        log.error("PersonId service unavailable at {}: {}", request.getRequestURI(), e.getMessage());
+        return buildErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), request.getRequestURI());
+    }
+
     // Catch-all for other unhandled RuntimeExceptions
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleOtherRuntimeExceptions(RuntimeException e, HttpServletRequest request) {
