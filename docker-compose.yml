@@ -14,13 +14,13 @@ services:
       - ./db:/docker-entrypoint-initdb.d
 
   personid-provider:
-    build: ./personid-provider
+    image: tweber94/personid-provider:latest
     container_name: personid-provider
     ports:
       - "8081:8081"
 
   genesis-resources:
-    build: ./genesis-resources
+    image: tweber94/genesis-resources:latest
     container_name: genesis-resources
     ports:
       - "8080:8080"
