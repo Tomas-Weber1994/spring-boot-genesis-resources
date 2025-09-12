@@ -58,19 +58,45 @@ Valid changes are persisted in the database.
 
 ---
 
-## 📌 Run the application
+## ⚙️ Base Settings
 
-Before running the application, make sure to set up the database and import the Postman collection:
+Before running the application, complete these steps **regardless of how you start the app**:
 
-1. **Set up the test database**
-   - Import the SQL dump located in the `db/` folder into your local MariaDB instance.
+```bash
+# 1. Clone the repository
+git clone https://github.com/Tomas-Weber1994/genesis-resources.git
+cd genesis-resources
 
-2. **Load the Postman collection**
-   - Open Postman and import the collection from the `postman/` folder.
+# 2. Create your .env file
+#    Copy the example and fill in your local credentials
+cp .env.example .env
+# Then edit the file with your own DB credentials and Person ID service URL
 
-3. Start the **Person ID Provider** helper service:  
-   [https://github.com/Tomas-Weber1994/personid-provider](https://github.com/Tomas-Weber1994/personid-provider)
+# 3. Load the Postman collection
+#    Open Postman and import the collection from the `postman/` folder
 
-4. Start the **Genesis Resources – User Management API** application.
 
-5. Now you can send requests using Postman.
+## 📌 Option 1 – Quick Start via Docker Compose (preferred)
+
+
+# Start all services
+docker compose up -d
+
+# Access APIs:
+# - Genesis Resources: http://localhost:8080
+# - Person ID Provider: http://localhost:8081
+
+# Stop services when done
+docker compose down
+
+
+## 📌 Option 2 – Run via IDE / Local Run
+
+1. Start the Person ID Provider helper service:
+https://github.com/Tomas-Weber1994/personid-provider
+
+2. Start the Genesis Resources – User Management API application in your IDE (e.g., IntelliJ).
+
+## ✅ Finally
+
+You can now send requests using Postman to interact with the API.
