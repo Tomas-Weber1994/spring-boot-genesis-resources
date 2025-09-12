@@ -57,46 +57,48 @@ Valid changes are persisted in the database.
 - GlobalExceptionHandler logs handled exceptions (`warn`/`error`)
 
 ---
-
 ## ⚙️ Base Settings
 
-Before running the application, complete these steps **regardless of how you start the app**:
-
+#### 1. Clone the repository
 ```bash
-# 1. Clone the repository
 git clone https://github.com/Tomas-Weber1994/genesis-resources.git
 cd genesis-resources
+```
 
-# 2. Create your .env file
-#    Copy the example and fill in your local credentials
+#### 2. Create your `.env` file
+```bash
 cp .env.example .env
-# Then edit the file with your own DB credentials and Person ID service URL
+```
+- Then edit the `.env` file with your own database credentials and Person ID service URL.
 
-# 3. Load the Postman collection
-#    Open Postman and import the collection from the `postman/` folder
 
+#### 3. Load the Postman collection
+- Open Postman and import the collection from the `postman/` folder.
+---
 
 ## 📌 Option 1 – Quick Start via Docker Compose (preferred)
-
-
-# Start all services
+#### 1. Start all services:
+```bash
 docker compose up -d
+```
+#### 2. Access APIs:
 
-# Access APIs:
-# - Genesis Resources: http://localhost:8080
-# - Person ID Provider: http://localhost:8081
+- Genesis Resources: http://localhost:8080
+- Person ID Provider: http://localhost:8081
 
-# Stop services when done
+#### 3. Stop services when done:
+```bash
 docker compose down
-
+```
+---
 
 ## 📌 Option 2 – Run via IDE / Local Run
 
-1. Start the Person ID Provider helper service:
-https://github.com/Tomas-Weber1994/personid-provider
+#### 1. Start the Person ID Provider helper service:
+   (`https://github.com/Tomas-Weber1994/personid-provider`)
 
-2. Start the Genesis Resources – User Management API application in your IDE (e.g., IntelliJ).
+#### 2. Start the Genesis Resources – User Management API application in your IDE (e.g., IntelliJ).
 
 ## ✅ Finally
 
-You can now send requests using Postman to interact with the API.
+- You can now send requests using Postman to interact with the API.
