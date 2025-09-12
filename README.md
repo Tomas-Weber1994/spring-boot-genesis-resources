@@ -59,46 +59,46 @@ Valid changes are persisted in the database.
 ---
 ## ⚙️ Base Settings
 
-#### 1. Clone the repository
+#### Clone the repository
 ```bash
 git clone https://github.com/Tomas-Weber1994/genesis-resources.git
 cd genesis-resources
 ```
 
-#### 2. Create your `.env` file
+#### Create your `.env` file
 ```bash
 cp .env.example .env
 ```
-- Then edit the `.env` file with your own database credentials and Person ID service URL.
+- Edit the `.env` file with your own database credentials and Person ID service URL.
 
-
-#### 3. Load the Postman collection
+#### Load the Postman collection
 - Open Postman and import the collection from the `postman/` folder.
 ---
 
 ## 📌 Option 1 – Quick Start via Docker Compose (preferred)
-#### 1. Start all services:
+
+#### Start all services:
 ```bash
 docker compose up -d
 ```
-#### 2. Access APIs:
+
+#### Access APIs:
 
 - Genesis Resources: http://localhost:8080
 - Person ID Provider: http://localhost:8081
 
-#### 3. Stop services when done:
+#### Stop services when done:
 ```bash
 docker compose down
 ```
 ---
 
 ## 📌 Option 2 – Run via IDE / Local Run
+- Start the Person ID Provider helper service: (`https://github.com/Tomas-Weber1994/personid-provider`)
 
-#### 1. Start the Person ID Provider helper service:
-   (`https://github.com/Tomas-Weber1994/personid-provider`)
+- Start the Genesis Resources – User Management API application in your IDE (e.g., IntelliJ).
 
-#### 2. Start the Genesis Resources – User Management API application in your IDE (e.g., IntelliJ).
-
+---
 ## ✅ Finally
 
 - You can now send requests using Postman to interact with the API.
