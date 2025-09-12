@@ -1,7 +1,10 @@
 # Genesis Resources – User Management API
 
-Spring Boot REST API for managing users. 
-Valid changes are persisted in the database.
+Spring Boot REST API for managing users, structured as **three microservices**:
+
+1. **Database** – MariaDB for persisting user data.
+2. **Person ID Provider** – External helper service simulation for validating `personId`.
+3. **Genesis Resources** – Main application providing user management endpoints.
 
 ---
 
