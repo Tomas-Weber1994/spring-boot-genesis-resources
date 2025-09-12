@@ -1,0 +1,35 @@
+services:
+  mariadb:
+    image: mariadb:11.8
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d
+
+  personid-provider:
+    build: ./personid-provider
+    container_name: personid-provider
+    ports:
+      - "8081:8081"
+
+  genesis-resources:
+    build: ./genesis-resources
+    container_name: genesis-resources
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+      - personid-provider
+    environment:
+      DB_URL: jdbc:mariadb://mariadb:3306/${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      PERSONID_SERVICE_URL: ${PERSONID_SERVICE_URL}
+
+volumes:
+  mariadb_data:
