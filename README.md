@@ -74,8 +74,9 @@ cp .env.example .env
 ```
 - Edit the `.env` file with your own database credentials and Person ID service URL.
 
-#### Load the Postman collection
-- Open Postman and import the collection from the `postman/` folder.
+#### Create DB and import Postman Collection
+- Import the collection in **Postman** from the `postman/` folder.
+- Create the database from the SQL dump in the `db/` folder
 ---
 
 ## 📌 Option 1 – Quick Start via Docker Compose (preferred)
