@@ -60,7 +60,7 @@ Spring Boot REST API for managing users, structured as **three microservices**:
 - GlobalExceptionHandler logs handled exceptions (`warn`/`error`)
 
 ---
-## ⚙️ Base Settings
+## ⚙️ Base Settings (one-time setup)
 
 #### Clone the repository
 ```bash
