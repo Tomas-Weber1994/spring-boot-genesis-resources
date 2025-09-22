@@ -1,4 +1,4 @@
-package com.engeto.genesis_resources.service.validation;
+package com.engeto.genesis_resources.service.client;
 
 import com.engeto.genesis_resources.dto.PersonIdResponseDTO;
 import com.engeto.genesis_resources.exception.PersonIdServerUnavailableException;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class PersonIdService {
+public class PersonIdClient {
 
     @Value("${personid.service.url}")
     private String validIdsUrl;

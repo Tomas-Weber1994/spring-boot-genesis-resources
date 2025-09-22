@@ -7,7 +7,7 @@ import com.engeto.genesis_resources.exception.InvalidPersonIdException;
 import com.engeto.genesis_resources.exception.UserNotFoundException;
 import com.engeto.genesis_resources.model.User;
 import com.engeto.genesis_resources.repository.UserRepository;
-import com.engeto.genesis_resources.service.validation.PersonIdService;
+import com.engeto.genesis_resources.service.client.PersonIdClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,7 +24,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PersonIdService personIdService;
+    private PersonIdClient personIdService;
 
     public List<User> getAllUsers() {
         log.info("Retrieving all users (detailed info)...");
