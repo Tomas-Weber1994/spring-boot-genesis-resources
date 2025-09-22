@@ -17,6 +17,14 @@
 /*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
 
 --
+-- Current Database: `engeto`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `engeto` /*!40100 DEFAULT CHARACTER SET cp1250 COLLATE cp1250_general_ci */;
+
+USE `engeto`;
+
+--
 -- Table structure for table `users`
 --
 
@@ -32,7 +40,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_unique` (`person_id`),
   UNIQUE KEY `users_unique_1` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=cp1250 COLLATE=cp1250_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=cp1250 COLLATE=cp1250_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,13 +50,12 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 set autocommit=0;
+INSERT INTO `users` VALUES
+(1,'Martin','Červený','bG2zC7jR9xVp','0802f012-042f-4104-81c5-1c95ac42fdd8'),
+(2,'Lucie','Hrubá','qE3lY6uT0vKd','bd8e2c93-0177-4107-9a17-5cdbe65da91f');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
-
---
--- Dumping routines for database 'engeto'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -59,4 +66,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-09-10 12:07:42
+-- Dump completed on 2025-09-22 17:37:58
